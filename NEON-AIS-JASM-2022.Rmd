@@ -182,9 +182,12 @@ download size first.
 
 ```{r download-data-waq, results='hide'}
 # download data of interest - Water Quality
-waq <- loadByProduct(dpID="DP1.20288.001", site="WALK", 
-                     startdate="2019-07", enddate="2019-07", 
-                     package="expanded", 
+waq <- loadByProduct(dpID="DP1.20288.001", 
+                     site="WALK", 
+                     startdate="2019-07", 
+                     enddate="2019-07", 
+                     package="expanded",
+                     release= "current",
                      token = Sys.getenv("NEON_TOKEN"),
                      check.size = F)
 

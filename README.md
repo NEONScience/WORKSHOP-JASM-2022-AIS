@@ -9,7 +9,7 @@ Aquatic Sciences Meeting (JASM) 2022 workshop Exploring NEON: Aquatic
 Instrument Data
 (<https://jasm2022.aquaticsocieties.org/workshops-professional-development/>).
 
-<!-- ****** Usage ****** -->
+<!-- ****** Prep ****** -->
 
 ## Preparation for the workshop
 
@@ -23,6 +23,18 @@ Instrument Data
 4.  Install required packages: neonUtilities, ggplot2, lubridate, plyr.
     Feel free to use lines 75-78 of the NEON-AIS-data-AEMON-J-DSOS.Rmd
     script in this repository.
+
+<!-- ****** Agenda ****** -->
+
+## Agenda
+
+1:00 pm - Introductions and Overview
+
+1:30 pm - Start Coding
+
+3:00 pm - Quick Break (\~15 minutes)
+
+4:30 pm - Discussion, networking, and social time
 
 <!-- ****** Usage ****** -->
 
