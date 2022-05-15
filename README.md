@@ -36,6 +36,28 @@ Instrument Data
 
 4:30 pm - Discussion, networking, and social time
 
+<!-- ****** Intro Links ****** -->
+
+## Introduction Links
+
+Getting Started with NEON data:
+<https://www.neonscience.org/resources/getting-started-neon-data-resources>
+
+NEON data portal: <https://data.neonscience.org/>
+
+Teaching Modules:
+<https://www.neonscience.org/resources/learning-hub/teaching-modules>
+<br /> QUBES modules:
+<https://qubeshub.org/community/groups/neon/educational_resources>
+<br /> EDDIE modules :
+<https://serc.carleton.edu/eddie/macrosystems/index.html>
+
+Spatial data and maps: <https://neon.maps.arcgis.com/home/index.html>
+
+NEONScience GitHub repo: <https://github.com/NEONScience> <br /> JASM
+2022 AIS Workshop GitHub repo:
+<https://github.com/NEONScience/WORKSHOP-JASM-2022-AIS>
+
 <!-- ****** Usage ****** -->
 
 ## Usage
