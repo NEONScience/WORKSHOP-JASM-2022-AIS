@@ -40,10 +40,10 @@ Instrument Data
 
 ## Introduction Links
 
-Getting Started with NEON data:
+Getting started with NEON data:
 <https://www.neonscience.org/resources/getting-started-neon-data-resources>
 
-NEON data portal: <https://data.neonscience.org/>
+Contact us form: <https://www.neonscience.org/about/contact-us>
 
 Teaching Modules:
 <https://www.neonscience.org/resources/learning-hub/teaching-modules>
@@ -53,6 +53,8 @@ Teaching Modules:
 <https://serc.carleton.edu/eddie/macrosystems/index.html>
 
 Spatial data and maps: <https://neon.maps.arcgis.com/home/index.html>
+
+NEON data portal: <https://data.neonscience.org/>
 
 NEONScience GitHub repo: <https://github.com/NEONScience> <br /> JASM
 2022 AIS Workshop GitHub repo:
