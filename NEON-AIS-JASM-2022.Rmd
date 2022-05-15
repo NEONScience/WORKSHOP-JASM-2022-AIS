@@ -199,8 +199,9 @@ TOOK = Toolik Lake AK
 WALK = Walker Branch TN         
 WLOU = West St Louis Creek CO       
 
-In this exercise, we will want data from only one NEON field site, Walker Branch 
-TN (WALK) from July, 2019. 
+In this exercise, we will pull data from only one NEON field site, Walker Branch 
+TN (WALK) from July, 2019. Quick link to the WALK site page: https://www.neonscience.org/field-sites/walk. 
+Just substitute the 4-letter site code for any other site at the end of the url. 
 
 Now let us download our data. If you are not using a NEON token to download 
 your data, neonUtilities will ignore the `token` input. We set `check.size = F`  
