@@ -41,7 +41,7 @@ explore and work with the downloaded data.  This includes navigating data
 documentation, separating data using the horizontal location (HOR) variable, 
 interpreting quality flags, and combining multiple data sets. 
 
-<div id="ds-objectives" markdown="1">
+<div id="ds-objectives" markdown="1"
 
 
 ## Objectives
@@ -162,7 +162,7 @@ products collected in NEON's Aquatic Instrument System:
 
 Now it's time to consider the NEON field site of interest. If not specified, 
 the default will download a data product from all sites. The following are 
-4-letter site codes for NEON's 34 aquatics sites as of 2020:
+4-letter site codes for NEON's 34 aquatics sites as of 2022:
 
 ARIK = Arikaree River CO        
 BARC = Barco Lake FL          
@@ -210,7 +210,7 @@ download size first.
 
 ```{r download-data-waq, results='hide'}
 # download data of interest - Water Quality
-waq <- loadByProduct(dpID="DP1.20288.001", 
+waq <- neonUtilities::loadByProduct(dpID="DP1.20288.001", 
                      site="WALK", 
                      startdate="2019-07", 
                      enddate="2019-07", 
@@ -281,6 +281,18 @@ csd <- loadByProduct(dpID="DP4.00130.001", site="WALK",
                      token = Sys.getenv("NEON_TOKEN"),
                      check.size = F)
 
+# Also for pulling geomorphology survey
+geo <- loadByProduct(dpID="DP4.00131.001", site="WALK",
+                     package="expanded",
+                     token = Sys.getenv("NEON_TOKEN"),
+                     check.size = F)
+geoResults <- geo$geo_resultsFile
+geoResults$dataFilePath
+# Paste url into a browser and the zip file with shapefiles and kmz and pdf will download
+
+# # Or if you're getting a bunch you could also use neonUtilities function (uncomment to use) to access geomorphology data
+# geoFolder <- zipsByProduct(dpID="DP4.00131.001")
+
 ```
 
 If you'd like you can use the `$` operator to assign an object from an item in 
@@ -295,8 +307,7 @@ list2env(waq, .GlobalEnv)
 So what exactly are these four files and why would you want to use them? 
 
 * **data file(s)**: There will always be one or more dataframes that include the 
-primary data of the data product you downloaded. Multiple dataframes are 
-available when there are related datatables for a single data product.
+primary data of the data product you downloaded. Multiple dataframes are available when there are related datatables for a single data product.
 * **readme_xxxxx**: The readme file, with the corresponding 5 digits from the 
 data product number, provides you with important information relevant to the 
 data product and the specific instance of downloading the data. Here you can find manual flagging notes for all sites, locations, and time periods.
@@ -311,6 +322,23 @@ surface water data products too:
 ```{r unlist-remainder}
 list2env(nsw, .GlobalEnv)
 list2env(csd, .GlobalEnv)
+```
+
+```{r site-timezone-info}
+# Just a little snippet if anyone wants to convert to local time
+# NEON data downloads are all in UTC timezone, unless otherwise specified
+devtools::install_github(repo = "NEONScience/NEON-geolocation", 
+                         subdir = "geoNEON")
+
+siteLocInfo <- geoNEON::getLocBySite("WALK", 
+                                     type = "site", 
+                                     history = F, 
+                                     token = NA_character_)
+
+localTZ <- siteLocInfo$siteTimezone
+
+waq_instantaneous$localStartTime <- format(waq_instantaneous$startDateTime,"%Y-%m-%dT%H:%M",tz = localTZ)
+
 ```
 
 Note that a few more objects were added to the Global Environment, including:
@@ -349,8 +377,8 @@ data. We can do this by looking for the `unique()` position designations in
 
 ```{r waq-hor-num-locations}
 # which sensor locations exist for water quality, DP1.20288.001?
-print("Water quality horizontal positions:")
-unique(waq_instantaneous$horizontalPosition)
+cat("Water quality horizontal positions: ", unique(waq_instantaneous$horizontalPosition))
+
 ```
 
 We can see that there are two water quality sensor positions at WALK in July 2019. 
@@ -720,19 +748,28 @@ NSW_15_minute$endDateTime<-lubridate::round_date(NSW_15_minute$endDateTime,unit=
 # Merge the dataframes using the time stamps.  A simple approach is matching 
 # every 15th discharge measurement with the corresponding nitrate measurement 
 # and discarding the rest.
-mergedData2<-merge(NSW_15_minute,csd_continuousDischarge,by.x="endDateTime",by.y="endDate",all.x=F,all.y=F)
+mergedData2<-merge(NSW_15_minute,csd_continuousDischarge,
+                   by.x="endDateTime",by.y="endDate",
+                   all.x=F,all.y=F)
 
 # An alternative approach would be to first convert the csd dataframe into 
 # 15 minute averages.
 csd_15_minute<-csd_continuousDischarge[,c("endDate","maxpostDischarge")]
 csd_15_minute$endDate<-lubridate::round_date(csd_15_minute$endDate,unit="15 minute")
 csd_15_minute<-plyr::ddply(csd_15_minute,c("endDate"),summarise,maxpostDischarge=mean(maxpostDischarge))
-mergedData2<-merge(NSW_15_minute,csd_15_minute,by.x="endDateTime",by.y="endDate",all.x=F,all.y=F)
+mergedData2b<-merge(NSW_15_minute,csd_15_minute,by.x="endDateTime",by.y="endDate",all.x=F,all.y=F)
 
 ggplot(data = mergedData2, 
        aes(x = maxpostDischarge, y = surfWaterNitrateMean)) +
   geom_point(color="green") + 
-  ggtitle("WALK NO3-N vs. Q") + 
+  ggtitle("WALK NO3-N vs. Q (subset)") + 
+  xlab("Q (L/s)") + 
+  ylab("NO3-N (uM)")
+
+ggplot(data = mergedData2b, 
+       aes(x = maxpostDischarge, y = surfWaterNitrateMean)) +
+  geom_point(color="green") + 
+  ggtitle("WALK NO3-N vs. Q (avg)") + 
   xlab("Q (L/s)") + 
   ylab("NO3-N (uM)")
 ```
