@@ -209,14 +209,11 @@ so that the script runs well but remember you always want to check your
 download size first.
 
 ```{r download-data-waq, results='hide'}
-siteID <- "COMO"
-startDateIn <- "2022-04"
-endDateIn <- "2022-04"
 # download data of interest - Water Quality
 waq <- neonUtilities::loadByProduct(dpID="DP1.20288.001", 
-                     site=siteID, 
-                     startdate=startDateIn, 
-                     enddate=endDateIn, 
+                     site="WALK", 
+                     startdate="2019-07", 
+                     enddate="2019-07", 
                      package="expanded",
                      release= "current",
                      token = Sys.getenv("NEON_TOKEN"),
@@ -272,25 +269,25 @@ the following parameters?
 
 ```{r download-data-nsw, results='hide'}
 # download data of interest - Nitrate in Surface Water
-nsw <-  loadByProduct(dpID="DP1.20033.001", site=siteID, 
-                      startdate=startDateIn, enddate=endDateIn, 
+nsw <-  loadByProduct(dpID="DP1.20033.001", site="WALK", 
+                      startdate="2019-07", enddate="2019-07", 
                       package="expanded", 
                       token = Sys.getenv("NEON_TOKEN"),
                       check.size = F)
 
-csd <- loadByProduct(dpID="DP4.00130.001", site=siteID,
-                     startdate=startDateIn, enddate=endDateIn,
+csd <- loadByProduct(dpID="DP4.00130.001", site="WALK",
+                     startdate="2019-07", enddate="2019-07",
                      package="expanded",
                      token = Sys.getenv("NEON_TOKEN"),
                      check.size = F)
 
-# # Also for pulling geomorphology survey
-# geo <- loadByProduct(dpID="DP4.00131.001", site=siteID,
-#                      package="expanded",
-#                      token = Sys.getenv("NEON_TOKEN"),
-#                      check.size = F)
-# geoResults <- geo$geo_resultsFile
-# geoResults$dataFilePath
+# Also for pulling geomorphology survey
+geo <- loadByProduct(dpID="DP4.00131.001", site="WALK",
+                     package="expanded",
+                     token = Sys.getenv("NEON_TOKEN"),
+                     check.size = F)
+geoResults <- geo$geo_resultsFile
+geoResults$dataFilePath
 # Paste url into a browser and the zip file with shapefiles and kmz and pdf will download
 
 # # Or if you're getting a bunch you could also use neonUtilities function (uncomment to use) to access geomorphology data
@@ -333,7 +330,7 @@ list2env(csd, .GlobalEnv)
 devtools::install_github(repo = "NEONScience/NEON-geolocation", 
                          subdir = "geoNEON")
 
-siteLocInfo <- geoNEON::getLocBySite(siteID, 
+siteLocInfo <- geoNEON::getLocBySite("WALK", 
                                      type = "site", 
                                      history = F, 
                                      token = NA_character_)
@@ -444,8 +441,8 @@ The data column we would like to plot is labeled `dissolvedOxygen`.
 plot_DO <- ggplot(data =waq_down,
                    aes(endDateTime, dissolvedOxygen)) +
                    geom_line(na.rm=TRUE, color="blue") + 
-                    ylab("DO (mg/L)") + xlab(" ") +
-                   ggtitle(paste0(siteID," Water Quality - DO"))
+                    ylim(8, 10) + ylab("DO (mg/L)") + xlab(" ") +
+                   ggtitle("WALK Water Quality - DO")
 
 plot_DO
 
@@ -463,8 +460,8 @@ corrected).
 plot_fDOM <- ggplot(data =waq_down,
                    aes(endDateTime, fDOM)) +
                    geom_line(na.rm=TRUE, color="red") + 
-                  ylab("fDOM QSU") + xlab(" ") +
-                   ggtitle(paste0(siteID," Water Quality - fDOM"))
+                    ylim(0, 60) + ylab("fDOM QSU") + xlab(" ") +
+                   ggtitle("WALK Water Quality - fDOM")
 
 plot_fDOM
 
@@ -497,7 +494,7 @@ plot_NSW <- ggplot(data = NSW_15_minute,
                    aes(endDateTime, surfWaterNitrateMean)) +
                    geom_line(na.rm=TRUE, color="green") + 
                    ylab("NO3-N (uM)") + xlab(" ") +
-                   ggtitle(paste0(siteID," Nitrate in Surface Water"))
+                   ggtitle("WALK Nitrate in Surface Water")
 
 plot_NSW
 
@@ -522,9 +519,9 @@ plot_Q <- ggplot() +
                   ymax = (withRemnUncQUpper1Std)), 
               alpha = 0.4, fill = "grey75") +
 	geom_line( na.rm = TRUE) +
-	ylab("Q (L/s)") +
+	ylim(0, 40) + ylab("Q (L/s)") +
 	xlab(" ") +
-  ggtitle(paste0(siteID," Continuous Discharge"))
+  ggtitle("WALK Continuous Discharge") 
 
 plot_Q
 
@@ -645,7 +642,7 @@ ggplot2::ggplot(data = waq_down,
   ggplot2::geom_step() +
   facet_grid(fDOMFinalQF ~ ., 
              labeller = labeller(fDOMFinalQF = group_labels)) +
-  ggplot2::ggtitle(paste0(siteID," Sensor Set 102 fDOM final QF comparison"))
+  ggplot2::ggtitle("WALK Sensor Set 102 fDOM final QF comparison")
 
 ```
 
